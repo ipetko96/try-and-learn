@@ -1,4 +1,4 @@
-with open("vstup") as file:
+with open("logo-vstup") as file:
     file = file.read().replace("\n", " ").split()
 print(file)
 
