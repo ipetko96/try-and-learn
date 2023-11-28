@@ -1,6 +1,6 @@
 class Stvorce:
     def __init__(self, n):
-        self.pole = [[0] * (n**2) for _ in range(n**2)]
+        self.pole = [[0] * (2**n) for _ in range(2**n)]
 
     def urob(self, index):
         self.sub_pole = self.pole[:]
@@ -31,28 +31,66 @@ class Stvorce:
                     self.pole[y][x] = 0
 
     def pocet(self):
-        print(
-            (sum([i.count(0) for i in self.pole]), sum([i.count(1) for i in self.pole]))
+        return (
+            sum([i.count(0) for i in self.pole]),
+            sum([i.count(1) for i in self.pole]),
         )
 
     def vypis(self):
         for i in self.pole:
             for j in i:
                 if j == 0:
-                    print('-', end='')
+                    print("-", end="")
                 elif j == 1:
-                    print('X', end='')
+                    print("X", end="")
             print()
 
 
-stv = Stvorce(4)
-vstup = ['1', '11', '131', '1314', '143', '12', '1233', '1234', '1243', '1244',
-         '23', '234', '2133', '2134', '2143', '2144', '24', '242', '2423',
-         '31', '313', '3132', '32', '324', '3232', '3411', '3412', '3421',
-         '3422', '4', '44', '424', '4241', '413', '4141', '43', '4311', '4312',
-         '4321', '4322']
+# stv = Stvorce(4)
+# vstup = [
+#     "1",
+#     "11",
+#     "131",
+#     "1314",
+#     "143",
+#     "12",
+#     "1233",
+#     "1234",
+#     "1243",
+#     "1244",
+#     "23",
+#     "234",
+#     "2133",
+#     "2134",
+#     "2143",
+#     "2144",
+#     "24",
+#     "242",
+#     "2423",
+#     "31",
+#     "313",
+#     "3132",
+#     "32",
+#     "324",
+#     "3232",
+#     "3411",
+#     "3412",
+#     "3421",
+#     "3422",
+#     "4",
+#     "44",
+#     "424",
+#     "4241",
+#     "413",
+#     "4141",
+#     "43",
+#     "4311",
+#     "4312",
+#     "4321",
+#     "4322",
+# ]
 
-for i in vstup:
-    stv.urob(i)
-stv.pocet()
-stv.vypis()
+# for i in vstup:
+#     stv.urob(i)
+# print(stv.pocet())
+# stv.vypis()
