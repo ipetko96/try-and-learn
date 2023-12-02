@@ -12,31 +12,40 @@ class RobotKarel:
                 self.pole[int(line[1])][int(line[2])].append(line[0])
 
     def __str__(self):
+        vypis = ""
         for y in range(len(self.pole)):
             for x in range(len(self.pole[y])):
-                if y == self.karel["y"] and x == self.karel["x"]:
-                    print(
-                        f"{self.karel['rotate_signs'][self.karel['smer'][0]]}", end=""
-                    )
-                else:
-                    print(f"{self.pole[y][x][-1]}", end="")
+                try:
+                    self.karel
+                    if y == self.karel["y"] and x == self.karel["x"]:
+                        vypis += f"{self.karel['rotate_signs'][self.karel['smer'][0]]}"
+
+                    else:
+                        vypis += f"{self.pole[y][x][-1]}"
+                except:
+                    vypis += f"{self.pole[y][x][-1]}"
             if y < len(self.pole) - 1:
-                print()
-        return ""
+                vypis += "\n"
+        return vypis
 
     def rotate(self, smer):
         smer = smer % 4
         self.karel["smer"] = self.karel["smer"][smer:] + self.karel["smer"][:smer]
 
     def robot(self, riadok, stlpec, smer):
-        self.karel = {
-            "y": riadok,
-            "x": stlpec,
-            "smer": [0, 1, 2, 3],
-            "rotate_signs": [">", "v", "<", "^"],
-            "batoh": [],
-        }
-        self.rotate(smer)
+        try:
+            self.karel["y"] = riadok
+            self.karel["x"] = stlpec
+            self.rotate(smer)
+        except:
+            self.karel = {
+                "y": riadok,
+                "x": stlpec,
+                "smer": [0, 1, 2, 3],
+                "rotate_signs": [">", "v", "<", "^"],
+                "batoh": [],
+            }
+            self.rotate(smer)
 
     def rob(self, prikaz):
         urobil = 0
@@ -82,30 +91,18 @@ class RobotKarel:
                     self.rotate(-1)
                     urobil += 1
                 elif prikaz == "poloz":
-                    self.pole[self.karel["y"]][self.karel["x"]].append(
-                        self.karel["batoh"][-1]
-                    )
-                    del self.karel["batoh"][-1]
+                    try:
+                        self.pole[self.karel["y"]][self.karel["x"]].append(
+                            self.karel["batoh"][-1]
+                        )
+                        del self.karel["batoh"][-1]
+                        urobil += 1
+                    except:
+                        pass
         return urobil
 
     def batoh(self):
-        return self.karel["batoh"]
-
-
-if __name__ == "__main__":
-    k = RobotKarel("subor1.txt")
-    k.robot(0, 0, 0)
-    print(k)
-    print(k.rob("krok"))
-    print(k.rob("2 zdvihni"))
-    k.rob("krok")
-    k.rob("vpravo")
-    k.rob("krok")
-    k.rob("2 zdvihni")
-    k.rob("2 krok")
-    print(k)
-    print("batoh =", k.batoh())
-    k.rob("poloz vlavo")
-    k.rob("krok 6 vlavo")
-    print(k)
-    print("batoh =", k.batoh())
+        try:
+            return self.karel["batoh"]
+        except:
+            return []
