@@ -76,10 +76,10 @@ class RobotKarel:
                         del self.pole[self.karel["y"]][self.karel["x"]][-1]
                         urobil += 1
                 elif prikaz == "vpravo":
-                    self.rotate(pocet)
+                    self.rotate(1)
                     urobil += 1
                 elif prikaz == "vlavo":
-                    self.rotate(-pocet)
+                    self.rotate(-1)
                     urobil += 1
                 elif prikaz == "poloz":
                     self.pole[self.karel["y"]][self.karel["x"]].append(
