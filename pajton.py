@@ -1,47 +1,63 @@
 class Pajton:
     def __init__(self):
         self.tab = {}
+        self.allowed = "abcdefghijklmnopqrstuvwxyz0123456789_"
 
     def prem(self, meno):
         try:
             return self.tab[meno]
-        except NameError:
-            print("premenna neni")
+        except:
+            raise NameError
 
     def vyraz(self, retazec):
-        vyraz = ""
+        vysledok = ""
         operacie = ["+", "-", "*", "/"]
         retazec = retazec.split()
         for i, v in enumerate(retazec):
             if i % 2 == 0:
                 if v.isnumeric():
-                    if i != 0 and vyraz[-1] in operacie:
-                        vyraz = vyraz.replace("/", "//")
-                        vyraz = str(eval(vyraz + v))
+                    if i != 0 and vysledok[-1] in operacie:
+                        vysledok = vysledok.replace("/", "//")
+                        vysledok = str(eval(vysledok + v))
                     else:
-                        vyraz += v
+                        vysledok += v
                 else:
                     raise SyntaxError
             elif i % 2 == 1:
                 if v in operacie:
-                    vyraz += v
+                    vysledok += v
                 else:
                     raise SyntaxError
 
-        if vyraz[-1] in operacie:
+        if vysledok[-1] in operacie:
             raise SyntaxError
-        return vyraz
+        return vysledok
 
-    def prirad(self, meno, hodnota):
-        ...
+    def prirad(self, retazec):
+        meno, hodnota = retazec.split(" = ")
+        meno = meno.strip()
+        hodnota = hodnota.strip()
+        if meno == hodnota:
+            raise SyntaxError
+        for i in meno.strip():
+            if i.lower() not in self.allowed:
+                raise SyntaxError
+        if meno[0].isnumeric():
+            raise SyntaxError
+        if len(hodnota.split()) > 1:
+            hodnota = self.vyraz(hodnota)
+        self.tab[meno] = hodnota
+        print(self.prem(meno))
 
     def prikaz(self, retazec):
         if retazec == "globals()":
             return self.globals()
         if retazec == "dir()":
             return self.dir()
-        if "vyraz" in retazec:
-            return self.vyraz(retazec.split("(")[1][:-1])
+        # if "vyraz" in retazec:
+        #     return self.vyraz(retazec.split("(")[1][:-1])
+        if " = " in retazec:
+            self.prirad(retazec)
 
     def dir(self):
         return ...
