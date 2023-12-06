@@ -6,7 +6,7 @@ class Pajton:
     def prem(self, meno):
         try:
             return self.tab[meno]
-        except:
+        except KeyError:
             raise NameError
 
     def vyraz(self, retazec):
@@ -47,23 +47,29 @@ class Pajton:
         if len(hodnota.split()) > 1:
             hodnota = self.vyraz(hodnota)
         self.tab[meno] = hodnota
-        print(self.prem(meno))
+        return None
 
     def prikaz(self, retazec):
         if retazec == "globals()":
             return self.globals()
         if retazec == "dir()":
             return self.dir()
-        # if "vyraz" in retazec:
-        #     return self.vyraz(retazec.split("(")[1][:-1])
+        if "prem(" in retazec:
+            return eval(f"self.{retazec}")
         if " = " in retazec:
-            self.prirad(retazec)
+            return self.prirad(retazec)
+        print(self.vyraz(retazec))
 
     def dir(self):
-        return ...
+        return self.tab.keys() | set()
 
     def globals(self):
-        return ...
+        if not self.tab:
+            return None
+        data = ""
+        for k, v in self.tab.items():
+            data += f"{k}:{v}\n"
+        return data[:-1]
 
 
 if __name__ == "__main__":
