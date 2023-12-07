@@ -2,6 +2,7 @@ class Pajton:
     def __init__(self):
         self.tab = {}
         self.allowed = "abcdefghijklmnopqrstuvwxyz0123456789_"
+        self.operacie = ["+", "-", "*", "/"]
 
     def prem(self, meno):
         try:
@@ -11,25 +12,31 @@ class Pajton:
 
     def vyraz(self, retazec):
         vysledok = ""
-        operacie = ["+", "-", "*", "/"]
         retazec = retazec.split()
         for i, v in enumerate(retazec):
             if i % 2 == 0:
+                for j in v:
+                    if j in self.operacie:
+                        raise SyntaxError
                 if v.isnumeric():
-                    if i != 0 and vysledok[-1] in operacie:
-                        vysledok = vysledok.replace("/", "//")
-                        vysledok = str(eval(vysledok + v))
-                    else:
-                        vysledok += v
+                    pass
                 else:
-                    raise SyntaxError
+                    try:
+                        v = self.prem(v)
+                    except NameError:
+                        raise SyntaxError
+                if i != 0 and vysledok[-1] in self.operacie:
+                    vysledok = vysledok.replace("/", "//")
+                    vysledok = str(eval(vysledok + v))
+                else:
+                    vysledok += v
             elif i % 2 == 1:
-                if v in operacie:
+                if v in self.operacie:
                     vysledok += v
                 else:
                     raise SyntaxError
 
-        if vysledok[-1] in operacie:
+        if vysledok[-1] in self.operacie:
             raise SyntaxError
         return vysledok
 
@@ -44,6 +51,8 @@ class Pajton:
                 raise SyntaxError
         if meno[0].isnumeric():
             raise SyntaxError
+        if len(hodnota) == 0:
+            raise SyntaxError
         if len(hodnota.split()) > 1:
             hodnota = self.vyraz(hodnota)
         self.tab[meno] = hodnota
@@ -55,7 +64,7 @@ class Pajton:
         if retazec == "dir()":
             return self.dir()
         if "prem(" in retazec:
-            return eval(f"self.{retazec}")
+            return eval(f"self.prem('{retazec[5:-1]}')")
         if " = " in retazec:
             return self.prirad(retazec)
         print(self.vyraz(retazec))
@@ -74,6 +83,9 @@ class Pajton:
 
 if __name__ == "__main__":
     p = Pajton()
+    # p.prikaz("a = 2")
+    # p.prikaz("b = a + 1")
+    # p.prikaz("c = 7 - b")
     while True:
         try:
             hodn = p.prikaz(input(">>> "))
