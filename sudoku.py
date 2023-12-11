@@ -1,14 +1,3 @@
-# . . . . . 9 . . .
-# . . 7 . 8 6 . . .
-# 6 . . 3 . . . . .
-# . 4 . . . 7 . . 8
-# . . . . . . . 3 2
-# . . 3 6 . 5 1 . .
-# . 6 . 7 . . . 8 .
-# 3 . 2 . . . 4 9 .
-# . 5 4 8 . . . . 3
-
-
 class Sudoku:
     def __init__(self, meno_suboru):
         self.tab = []
@@ -31,38 +20,21 @@ class Sudoku:
     def urob(self):
         tab_copy = [x[:] for x in self.tab]
         rotated = list(zip(*tab_copy[::-1]))
-        for y, line in enumerate(tab_copy):
-            for x, value in enumerate(line):
+        for y, row in enumerate(tab_copy):
+            for x, value in enumerate(row):
                 if value == ".":
-                    if y < 3 and x < 3:
-                        slice = [row[:3] for row in tab_copy][:3]
-                    elif y < 3 and x < 6:
-                        slice = [row[3:6] for row in tab_copy][:3]
-                    elif y < 3 and x < 9:
-                        slice = [row[6:9] for row in tab_copy][:3]
-                    elif y < 6 and x < 3:
-                        slice = [row[:3] for row in tab_copy][3:6]
-                    elif y < 6 and x < 6:
-                        slice = [row[3:6] for row in tab_copy][3:6]
-                    elif y < 6 and x < 9:
-                        slice = [row[6:9] for row in tab_copy][3:6]
-                    elif y < 9 and x < 3:
-                        slice = [row[:3] for row in tab_copy][6:]
-                    elif y < 9 and x < 6:
-                        slice = [row[3:6] for row in tab_copy][6:]
-                    elif y < 9 and x < 9:
-                        slice = [row[6:9] for row in tab_copy][6:]
-                    slice = set(sum(slice, []))
-                    line = set(line)
+                    square = [row[(x - x % 3):x - x % 3 + 3] for row in tab_copy][(y - y % 3):y - y % 3 + 3]
+                    square = set(sum(square, []))
+                    row = set(row)
                     column = set(rotated[x])
-                    diff = self.numbers - line - column - slice
+                    diff = self.numbers - row - column - square
                     self.tab[y][x] = diff
-        if any({} in sublist for sublist in self.tab):
+        if any(set() in sublist for sublist in self.tab):
             return None
         else:
             count = 0
-            for line in self.tab:
-                for value in line:
+            for row in self.tab:
+                for value in row:
                     if isinstance(value, set) and len(value) == 1:
                         count += 1
             return count
@@ -71,21 +43,24 @@ class Sudoku:
         for i, line in enumerate(self.tab):
             for j, element in enumerate(line):
                 if isinstance(element, set):
-                    if len(element) > 1:
-                        self.tab[i][j] = "."
-                    else:
+                    if len(element) == 1:
                         self.tab[i][j] = element.pop()
+                    else:
+                        self.tab[i][j] = "."
 
     def ries(self):
-        ...
+        self.nahrad()
+        nahraditelne = self.urob()
+        pocet_cyklov = 0
+        while nahraditelne is not None:
+            pocet_cyklov += 1
+            self.nahrad()
+            if nahraditelne == 0:
+                return (pocet_cyklov, self.pocet_nezaplnenych())
+            nahraditelne = self.urob()
+        self.urob()
+        self.nahrad()
+        return (pocet_cyklov + 1, None)
 
     def pocet_nezaplnenych(self):
-        ...
-
-
-s = Sudoku("input")
-print(s)
-print(s.urob())
-s.nahrad()
-print(s)
-...
+        return sum(x.count(".") for x in self.tab)
