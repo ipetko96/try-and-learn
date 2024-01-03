@@ -3,12 +3,16 @@ class Mravec:
         with open(meno_suboru) as file:
             file = file.read().split("\n\n")
             self.pole = [[j for j in i] for i in file[0].split()]
+            self.kocky = {(int(i[2]), int(i[4])): i[0] for i in file[1].split("\n")}
 
     def __str__(self):
         vypis = ""
-        for line in self.pole:
-            for value in line:
-                vypis += value
+        for y in range(len(self.pole)):
+            for x in range(len(self.pole[y])):
+                try:
+                    vypis += self.kocky[(y, x)]
+                except KeyError:
+                    vypis += self.pole[y][x]
             vypis += "\n"
         return vypis[:-1]
 
