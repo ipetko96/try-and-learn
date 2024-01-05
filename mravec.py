@@ -23,13 +23,17 @@ class Mravec:
         ...
 
     def zisti(self):
-        return set()
+        stoji = set()
+        for i in self.kocky:
+            if self.pole[i[0]][i[1]] == "+":
+                stoji.add(self.kocky[i])
+        return stoji
 
 
 if __name__ == "__main__":
     m = Mravec("subor1.txt")
     print(m)
-    # print("zisti =", m.zisti())
+    print("zisti =", m.zisti())
     # m.start(1, 0)
     # m.rob("pp")
     # print(m)
