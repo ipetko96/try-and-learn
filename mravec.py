@@ -5,6 +5,7 @@ class Mravec:
             self.pole = [[j for j in i] for i in file[0].split()]
             self.kocky = {(int(i[2]), int(i[4])): i[0] for i in file[1].split("\n")}
             self.hrac = (None, None)
+            self.mapa = {"p": "y,x+1", "d": "y+1,x", "l": "y,x-1", "h": "y-1,x"}
 
     def __str__(self):
         vypis = ""
@@ -24,19 +25,20 @@ class Mravec:
         self.hrac = (riadok, stlpec)
 
     def potlac(self, y, x, smer):
-        if smer == "p":
-            if (y, x + 1) in self.kocky:
-                self.potlac(y, x + 1, smer)
-            self.kocky[(y, x + 1)] = self.kocky.pop((y, x))
+        suradnice = self.mapa[smer]
+        if eval(suradnice) in self.kocky:
+            self.potlac(*eval(suradnice), smer)
+        self.kocky[(eval(suradnice))] = self.kocky.pop((y, x))
 
     def rob(self, prikazy):
         while len(prikazy) > 0:
             prikaz = prikazy[:1]
-            if prikaz == "p":
-                y, x = self.hrac
-                if (y, x + 1) in self.kocky:
-                    self.potlac(y, x + 1, prikaz)
-                self.hrac = (y, x + 1)
+            # variables y and x are used later in the eval function
+            y, x = self.hrac
+            suradnice = self.mapa[prikaz]
+            if eval(suradnice) in self.kocky:
+                self.potlac(*eval(suradnice), prikaz)
+            self.hrac = eval(suradnice)
             prikazy = prikazy[1:]
 
     def zisti(self):
@@ -53,7 +55,7 @@ if __name__ == "__main__":
     print("zisti =", m.zisti())
     m.start(1, 0)
     print(m)
-    m.rob("ppp")
+    m.rob("ppdlhhppp")
     print(m)
     print("zisti =", m.zisti())
     # m.rob("dl")
