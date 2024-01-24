@@ -56,9 +56,13 @@ class Mravec:
 
     def zisti(self):
         naPlusku = set()
-        for i in self.kocky:
-            if self.pole[i[0]][i[1]] == "+":
-                naPlusku.add(self.kocky[i])
+        for k, v in self.kocky.items():
+            try:
+                self.pole[k[0]][k[1]]
+            except IndexError:
+                continue
+            if self.pole[k[0]][k[1]] == "+":
+                naPlusku.add(v)
         return naPlusku
 
 
@@ -67,9 +71,9 @@ if __name__ == "__main__":
     print(m)
     print("zisti =", m.zisti())
     m.start(1, 0)
-    m.rob("ppp")
+    m.rob("pp")
     print(m)
     print("zisti =", m.zisti())
-    # m.rob("dl")
-    # print(m)
-    # print("zisti =", m.zisti())
+    m.rob("dl")
+    print(m)
+    print("zisti =", m.zisti())
