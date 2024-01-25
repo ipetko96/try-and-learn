@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" />
+    <link rel="manifest" href="{{url_for('static', filename='manifest.json')}}">
+    <title>PWA Demo</title>
+</head>
+
+<body>
+    <h1>Hello, World!</h1>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("{{url_for('static', filename='sw.js')}}", { scope: "/static/" });
+        }
+    </script>
+</body>
+
+</html>
