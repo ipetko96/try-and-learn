@@ -1,0 +1,15 @@
+{
+    "short_name": "My App",
+    "name": "My Application",
+    "icons": [
+        {
+            "src": "/static/flask.png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#2f3d58",
+    "theme_color": "#2E2E2E",
+    "display": "standalone",
+    "orientation": "portrait-primary"
+}

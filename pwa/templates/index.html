@@ -5,54 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" />
-    <link rel="manifest" href="/static/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title>PWA Demo</title>
 </head>
 
 <body>
     <h1>Hello, World!</h1>
-    <button id="installApp">Install app to the device</button>
-    <button id="notifications">Trigger one local notification</button>
+    <!-- <button id="installApp">Install app to the device</button>
+    <button id="notifications">Trigger one local notification</button> -->
     <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/static/sw.js");
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function (registration) {
+                    console.log('Registration successful, scope is:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.log('Service worker registration failed, error:', error);
+                });
         }
-
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            deferredPrompt = e;
-        });
-
-        const installApp = document.getElementById('installApp');
-        installApp.addEventListener('click', async () => {
-            if (deferredPrompt !== null) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    deferredPrompt = null;
-                }
-            }
-        });
-
-        function randomNotification() {
-            const notifTitle = 'PWA Demo';
-            const notifBody = `Demo notification`;
-            const notifImg = `/static/flask.png`;
-            const options = {
-                body: notifBody,
-                icon: notifImg,
-            };
-            new Notification(notifTitle, options);
-        }
-
-        const button = document.getElementById("notifications");
-        button.addEventListener("click", () => {
-            Notification.requestPermission().then((result) => {
-                if (result === "granted") {
-                    randomNotification();
-                }
-            });
-        });
     </script>
 </body>
 
