@@ -23,20 +23,20 @@ table = {node: [infinity, None] for node in graph}
 table["A"][0] = 0
 
 while len(unvisited) != 0:
-    i = None
+    neighbors = None
     smallest = infinity
-    for k in table:
-        if k not in unvisited:
+    for node in table:
+        if node not in unvisited:
             continue
-        if table[k][0] < smallest:
-            i = k
-    for j in graph[i]:
-        if i not in unvisited:
+        if table[node][0] < smallest:
+            neighbors = node
+    for neighbor in graph[neighbors]:
+        if neighbors not in unvisited:
             continue
-        if table[i][0] + j[1] < table[j[0]][0]:
-            table[j[0]][0] = table[i][0] + j[1]
-            table[j[0]][1] = i
-    visited.append(i)
-    unvisited.remove(i)
-for i in table:
-    print(i, table[i])
+        if table[neighbors][0] + neighbor[1] < table[neighbor[0]][0]:
+            table[neighbor[0]][0] = table[neighbors][0] + neighbor[1]
+            table[neighbor[0]][1] = neighbors
+    visited.append(neighbors)
+    unvisited.remove(neighbors)
+for neighbors in table:
+    print(neighbors, table[neighbors])
